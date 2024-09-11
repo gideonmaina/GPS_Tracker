@@ -44,7 +44,7 @@ String CLOUD_URL = FIREBASE_URL;
 // Function declarations
 
 void read_serial(SoftwareSerial *softSerial, char *buffer);
-void sendATcommand(SoftwareSerial *softSerial, String CMD, int timeout = 4000, bool fill_buffer = false);
+void sendATcommand(SoftwareSerial *softSerial, String CMD, long unsigned int timeout = 4000, bool fill_buffer = false);
 void cleanSerial(SoftwareSerial *softSerial);
 void enableGPRS();
 void PUT_REQUEST(const String &data);
@@ -121,24 +121,16 @@ void read_serial(SoftwareSerial *softSerial, char *buffer)
         delay(2); // ? This seems to be the trick to get all serial data if it comes in chunks
     }
 
-    buffer[buff_pos] = '\0';
+    buffer[buff_pos] = '\0'; // ? Unecessary if memset is used
 }
 
-// ToDo: Merge this with read_serial
-void sendATcommand(SoftwareSerial *softSerial, String CMD, int timeouty, bool fill_buffer)
+void sendATcommand(SoftwareSerial *softSerial, String CMD, long unsigned int _timeout, bool fill_buffer)
 {
     Serial.println("*********");
-    unsigned int timeout = timeouty;
-    bool bufferfull = false;
-    int buff_pos = 0;
-    // char msgStream[MESSAGE_BUFFER_SIZE];
     bool ASSERT_BUFFER = fill_buffer;
-    String cmd = CMD;
-    // Just in case there is serial data from serials
-    memset(msgStream, '\0', MESSAGE_BUFFER_SIZE);
     cleanSerial(softSerial);
 
-    softSerial->println(cmd);
+    softSerial->println(CMD);
     unsigned int send_time = millis();
 
     do
@@ -146,21 +138,9 @@ void sendATcommand(SoftwareSerial *softSerial, String CMD, int timeouty, bool fi
 
         if (softSerial->available())
         {
-
-            if (buff_pos == MESSAGE_BUFFER_SIZE - 1)
-            {
-                bufferfull = true;
-                Serial.println("\nBuffer full");
-                break;
-            }
-            unsigned char c = softSerial->read();
-            msgStream[buff_pos] = c;
-            buff_pos++;
-            // delay(2); // this seems to be the smocking gun
+            read_serial(softSerial, msgStream);
         }
-    } while ((millis() - send_time) < timeout || ASSERT_BUFFER);
-
-    msgStream[buff_pos] = '\0';
+    } while ((millis() - send_time) < _timeout || ASSERT_BUFFER);
 
     const char *ptr = msgStream;
     while (*ptr)
