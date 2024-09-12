@@ -259,7 +259,7 @@ void gps_status_send()
 {
 
     Serial.println("Sending GPS data");
-    String data = "";
+    String data = "<h1>GPS COORDS</h1>\n";
     if (_lat != 0 && _long != 0)
     {
         data += "<p>Current Latitude: " + String(_lat, 9) + "</P>\n";
@@ -283,7 +283,7 @@ void gps_status_send()
 
 String SendHTML(String _body)
 {
-    String ptr = "<!DOCTYPE html>< html >\n ";
+    String ptr = "<!DOCTYPE html><html>\n ";
     ptr += "<head><meta name='viewport' content='width=device-width, initial-scale=1.0' /><title>GPS TRACKER</title></head>\n";
     ptr += "<body>\n";
     ptr += "<style>\n";
@@ -293,7 +293,6 @@ String SendHTML(String _body)
     ptr += "</style>\n";
     ptr += "<h3><i>Webserver in Access Point (AP) Mode</i></h3>\n";
     ptr += "<div style='display: flex; gap: 1rem'><a href='/'>Home</a> <a href='/logs'>Serial logs</a></div>\n";
-    ptr += "<h1>GPS TRACKER</h1>\n";
 
     if (_body)
     {
@@ -319,7 +318,7 @@ void handle_OnConnect()
 
 void display_logs()
 {
-    String body = "<h1>GSM Serial logs</h1>\n";
+    String body = "<h1>Serial logs</h1>\n";
     body += "<div style=\"margin:8px 4px;border:1px solid red; padding: 4px\">\n";
     body += "<p>" + String(msgStream) + "</p>";
     body += "</div>\n";
