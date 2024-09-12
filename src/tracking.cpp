@@ -271,7 +271,7 @@ void gps_status_send()
         data += "<div style=\"padding:4px;border: 1px solid green;word-wrap:break-word;\">";
         data += "<p>Updated latitude FROM: " + String(_prevLat, 9) + " TO: " + String(_newLat, 9) + "</P>\n";
         data += "<p>Updated longtitude FROM: " + String(_prevLong, 9) + " TO: " + String(_newLong, 9) + "</P>\n";
-        data += "<div>\n";
+        data += "</div>\n";
     }
     else
     {
@@ -283,23 +283,17 @@ void gps_status_send()
 
 String SendHTML(String _body)
 {
-    String ptr = "<!DOCTYPE html> <html>\n";
-    ptr += "<head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, user-scalable=no\">\n";
-    ptr += "<title>GPS TRACKER</title>\n";
-    ptr += "<style>html { font-family: Helvetica; display: inline-block; margin: 0px auto; text-align: center;}\n";
-    ptr += "body{margin-top: 50px;} h1 {color: #444444;margin: 50px auto 30px;} h3 {color: #444444;margin-bottom: 50px;}\n";
-    ptr += ".button {display: block;background-color: #1abc9c;border: none;color: white;padding: 13px 30px;text-decoration: none;font-size: 25px;margin: 8px auto 35px;cursor: pointer;border-radius: 4px;}\n";
-    ptr += ".button-on {background-color: #1abc9c;}\n";
-    ptr += ".button-on:active {background-color: #16a085;}\n";
-    ptr += ".button-off {background-color: #34495e;}\n";
-    ptr += ".button-off:active {background-color: #2c3e50;}\n";
-    ptr += "p {font-size: 14px;color: #888;margin-bottom: 10px;}\n";
-    ptr += "</style>\n";
-    ptr += "</head>\n";
+    String ptr = "<!DOCTYPE html>< html >\n ";
+    ptr += "<head><meta name='viewport' content='width=device-width, initial-scale=1.0' /><title>GPS TRACKER</title></head>\n";
     ptr += "<body>\n";
-    ptr += "<div style=\"display:flex; gap: 1rem;\"> <a href=\"/\">Home</a> <a href=\"/logs\">Serial logs</a> </div>\n";
-    ptr += "<h1>ESP8266 Web Server</h1>\n";
-    ptr += "<h3>Using Station(STA) Mode</h3>\n";
+    ptr += "<style>\n";
+    ptr += "body{margin-top:50px;display:flex;flex-direction:column;padding:1rem;align-items:center}h1,h3{color:#2f2d2d;margin:1rem auto}";
+    ptr += "a,a:active,a:hover,a:visited{text-decoration:none;font-size:32px;color:#15ad8f}p{font-size:1rem;color:#3a3838;margin:12px auto}";
+    ptr += "button{padding:.5rem 1rem;outline:0;border-radius:5px;background-color:#0ba485;border:0;cursor:pointer;color:#fff;font-size:24px}";
+    ptr += "</style>\n";
+    ptr += "<h3><i>Webserver in Access Point (AP) Mode</i></h3>\n";
+    ptr += "<div style='display: flex; gap: 1rem'><a href='/'>Home</a> <a href='/logs'>Serial logs</a></div>\n";
+    ptr += "<h1>GPS TRACKER</h1>\n";
 
     if (_body)
     {
@@ -308,11 +302,10 @@ String SendHTML(String _body)
     }
     else
     {
-        ptr += "<p> NOTHING TO SHOW";
+        ptr += "<p> NOTHING TO SHOW</p>";
     }
 
-    ptr += "<a class=\"button button-on\" href=\"/restart\">RESTART</a>\n";
-
+    ptr += "<a href='/restart'><button>RESTART</button></a>\n";
     ptr += "</body>\n";
     ptr += "</html>\n";
     return ptr;
